@@ -1,5 +1,12 @@
-class Brain {
-  
+package neuralNetworkLanguageDetection;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Brain {
+	  
     private int[]           BRAIN_LAYER_SIZES; //array to store size of each layer of neurons - remove this variable
   
     private double[][]      neurons; //2D array of neurons - change to its own data type
@@ -9,7 +16,13 @@ class Brain {
     private int             topOutput; //index with highest confidence in prediction
 
 
-    Brain(int[] brainLayerSizes, float startingAxonVariability, float alpha) {
+    /**
+     * 
+     * @param brainLayerSizes
+     * @param startingAxonVariability
+     * @param alpha
+     */
+    public Brain(int[] brainLayerSizes, double startingAxonVariability, double alpha) {
       
         this.BRAIN_LAYER_SIZES   = brainLayerSizes;
         
@@ -39,21 +52,36 @@ class Brain {
     }
     
     
-    /*
-      this is for using the neuronet once it is trained
-    */
-    public double useBrain(double[] inputs, double[] desiredOutputs) {
-        return useBrainGetError(inputs, desiredOutputs, false);
+    /**
+     * 
+     * @param brainLayerSizes
+     */
+    public Brain(int[] brainLayerSizes) {
+    		this(brainLayerSizes, 1.0, 0.1);
+    }
+    
+    
+    public Brain(double[][] neurons, double[][][] axons, double alpha) {
+    		this.neurons = neurons.clone();
+    		this.axons = axons.clone();
+    		this.alpha = alpha;
     }
 
 
-    public double useBrainGetError(double[] inputs, double[] desiredOutputs, boolean evolve){
+    /**
+     * 
+     * @param inputs
+     * @param desiredOutputs
+     * @param evolve
+     * @return
+     */
+    public double useBrain(double[] inputs, double[] desiredOutputs, boolean evolve){
         int[] nonzero = {this.BRAIN_LAYER_SIZES[0] - 1};
 
         for (int i = 0; i < this.BRAIN_LAYER_SIZES[0]; i++) {
             this.neurons[0][i] = inputs[i];
             if (inputs[i] != 0)
-                nonzero = append(nonzero, i);
+                nonzero = Processing.append(nonzero, i); //what does this even do?
         }
 
         for (int i = 0; i < this.BRAIN_LAYER_SIZES.length; i++)
@@ -62,7 +90,7 @@ class Brain {
         for (int i = 1; i < this.BRAIN_LAYER_SIZES.length; i++) {
           
             for (int j = 0; j < this.BRAIN_LAYER_SIZES[i] - 1; j++) {
-                float total = 0;
+                double total = 0;
                 if (i == 1) {
                     for(int k = 0; k < nonzero.length; k++)
                         total += this.neurons[i-1][nonzero[k]] * this.axons[i - 1][nonzero[k]][j];
@@ -91,7 +119,7 @@ class Brain {
             }
         }
 
-        this.topOutput = getTopOutput();
+        this.topOutput = calculateTopOutput();
         double totalError = 0;
         int end = this.BRAIN_LAYER_SIZES.length - 1;
 
@@ -103,16 +131,21 @@ class Brain {
     }
     
     
-    
-    /*
-      sigmoid function
-    */
+    /**
+     * 
+     * @param input
+     * @return
+     */
     public double sigmoid(double input) {
         return 1.0 / (1.0 + Math.exp( -input ));
     }
 
 
-    public int getTopOutput() {
+    /**
+     * 
+     * @return
+     */
+    public int calculateTopOutput() {
         double record = 0;
         int recordHolder = 0;
         int end = this.BRAIN_LAYER_SIZES.length-1;
@@ -126,5 +159,77 @@ class Brain {
     }
     
     
+    /**
+     * 
+     * @return
+     */
+    public int getTopOutput() {
+    		return this.topOutput;
+    }
+    
+    
+    /**
+     * 
+     * @return
+     */
+    public double[][] getNeurons() {
+    		return this.neurons;
+    }
+    
+    
+    /**
+     * 
+     * @return
+     */
+    public double[][][] getAxons() {
+    		return this.axons;
+    }
+    
+    
+    //not yet tested
+    public static Brain loadBrain(String neuronsFileName, String axonsFileName) throws FileNotFoundException {
+    	
+    		Scanner scanner;
+    		ArrayList<String> neuronText = new ArrayList<String>();
+    		ArrayList<String> axonText = new ArrayList<String>();
+    		
+    		scanner = new Scanner( new File(neuronsFileName) );
+    		while(scanner.hasNextLine())
+    			neuronText.add( scanner.nextLine() );
+    		scanner.close();
+    		
+    		scanner = new Scanner( new File(axonsFileName) );
+    		while(scanner.hasNextLine())
+    			axonText.add( scanner.nextLine() );
+    		scanner.close();
+    		
+    		double[][] neurons = new double[neuronText.size()][];
+    		double[][][] axons = new double[axonText.size()][][];
+    		
+    		for(int i = 0; i < neurons.length; i++) {
+    			String[] temp = neuronText.get(i).split("\t");
+    			neurons[i] = new double[temp.length];
+    			for(int j = 0; j < neurons[i].length; i++)
+    				neurons[i][j] = Double.parseDouble(temp[i]);
+    		}
+    		
+    		for(int i = 0; i < axons.length; i++) {
+    			String[] temp1 = axonText.get(i).split("\t");
+    			axons[i] = new double[temp1.length][];
+    			for(int j = 0; j < axons[i].length; i++) {
+    				String[] temp2 = temp1[j].split(",");
+    				for(int k = 0; k < axons[i][j].length; k++) {
+    					axons[i][j][k] = Double.parseDouble(temp2[k]);
+    				}
+    			}
+    		}
+    		
+    		return new Brain(neurons, axons, 0.1);
+    		
+    		
+    }
+    
+    
 }
+
 
