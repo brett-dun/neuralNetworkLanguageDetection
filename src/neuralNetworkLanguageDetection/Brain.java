@@ -7,9 +7,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Brain {
-	  
-    //private int[]           BRAIN_LAYER_SIZES; //array to store size of each layer of neurons - remove this variable
-  
+
     private double[][]      neurons; //2D array of neurons - change to its own data type
     private double[][][]    axons; //3D array of axons
     
@@ -76,6 +74,7 @@ public class Brain {
      * @param evolve
      * @return
      */
+    //This method should be redesigned to support more layers
     public double useBrain(double[] inputs, double[] desiredOutputs, boolean evolve){
         int[] nonzero = {this.neurons[0].length - 1};
 
