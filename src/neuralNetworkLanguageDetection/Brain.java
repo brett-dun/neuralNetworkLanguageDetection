@@ -8,13 +8,13 @@ import java.util.Scanner;
 
 public class Brain {
 	  
-    private int[]           BRAIN_LAYER_SIZES; //array to store size of each layer of neurons - remove this variable
+    //private int[]           BRAIN_LAYER_SIZES; //array to store size of each layer of neurons - remove this variable
   
     private double[][]      neurons; //2D array of neurons - change to its own data type
     private double[][][]    axons; //3D array of axons
     
     private double          alpha; //0.1 would be a good default
-    private int             topOutput; //index with highest confidence in prediction
+    private int             prediction; //index with highest confidence in prediction
 
 
     /**
@@ -25,26 +25,26 @@ public class Brain {
      */
     public Brain(int[] brainLayerSizes, double startingAxonVariability, double alpha) {
       
-        this.BRAIN_LAYER_SIZES   = brainLayerSizes;
+        //this.BRAIN_LAYER_SIZES   = brainLayerSizes; //let's try to get rid of this
         
         this.neurons             = new double[ brainLayerSizes.length ][]; //set the number of layers
-        this.axons               = new double[ brainLayerSizes.length-1 ][][]; //set the number of layers
+        this.axons               = new double[ this.neurons.length-1 ][][]; //set the number of layers
         
         this.alpha               = alpha;
 
-        for(int i = 0; i < this.BRAIN_LAYER_SIZES.length; i++) {
+        for (int i = 0; i < this.neurons.length; i++)
+            this.neurons[i] = new double[ brainLayerSizes[i] ];
 
-            this.neurons[i] = new double[ BRAIN_LAYER_SIZES[i] ];
-            
-            this.neurons[i][ BRAIN_LAYER_SIZES[i]-1 ] = 1.; //Set the last neuron of each layer to 1
+        for (int i = 0; i < this.neurons.length; i++) {
+            this.neurons[i][ this.neurons[i].length-1 ] = 1.; //Set the last neuron of each layer to 1
 
-            if (i < BRAIN_LAYER_SIZES.length - 1) {
-                this.axons[i] = new double[ BRAIN_LAYER_SIZES[i] ][];
+            if (i < this.neurons.length - 1) {
+                this.axons[i] = new double[ this.neurons[i].length ][];//
 
-                for (int j = 0; j < brainLayerSizes[i]; j++) {
-                    this.axons[i][j] = new double[ BRAIN_LAYER_SIZES[i+1]-1 ];
+                for (int j = 0; j < this.axons[i].length; j++) {
+                    this.axons[i][j] = new double[ this.neurons[i+1].length-1 ]; //this causes the exception
 
-                    for(int k = 0; k < BRAIN_LAYER_SIZES[i+1] - 1; k++)
+                    for (int k = 0; k < this.axons[i][j].length; k++)
                         this.axons[i][j][k] = (Math.random() * 2 - 1) * startingAxonVariability; //set the starting value
                         
                 }
@@ -77,27 +77,27 @@ public class Brain {
      * @return
      */
     public double useBrain(double[] inputs, double[] desiredOutputs, boolean evolve){
-        int[] nonzero = {this.BRAIN_LAYER_SIZES[0] - 1};
+        int[] nonzero = {this.neurons[0].length - 1};
 
-        for (int i = 0; i < this.BRAIN_LAYER_SIZES[0]; i++) {
+        for (int i = 0; i < this.neurons[0].length; i++) {
             this.neurons[0][i] = inputs[i];
             if (inputs[i] != 0)
                 nonzero = Processing.append(nonzero, i); //only append the value of i if the input of i has a non-zero value
         }
 
-        for (int i = 0; i < this.BRAIN_LAYER_SIZES.length; i++)
-            this.neurons[i][this.BRAIN_LAYER_SIZES[i] - 1] = 1.0;
+        for (int i = 0; i < this.neurons.length; i++)
+            this.neurons[i][this.neurons[i].length - 1] = 1.0;
 
 
-        for (int i = 1; i < this.BRAIN_LAYER_SIZES.length; i++) {
+        for (int i = 1; i < this.neurons.length; i++) {
           
-            for (int j = 0; j < this.BRAIN_LAYER_SIZES[i] - 1; j++) {
+            for (int j = 0; j < this.neurons[i].length - 1; j++) {
                 double total = 0.;
                 if (i == 1) {
                     for(int k = 0; k < nonzero.length; k++)
                         total += this.neurons[i-1][nonzero[k]] * this.axons[i - 1][nonzero[k]][j];
                 } else {
-                    for(int k = 0; k < this.BRAIN_LAYER_SIZES[i - 1] - 1; k++)
+                    for(int k = 0; k < this.neurons[i - 1].length - 1; k++)
                         total += this.neurons[i-1][k] * this.axons[i - 1][k][j];
                 }
                 
@@ -109,28 +109,28 @@ public class Brain {
         //If the brain is set to "learn" and not just give back a result
         if(evolve) {
             for (int i = 0; i < nonzero.length; i++) {
-                for (int j = 0; j < this.BRAIN_LAYER_SIZES[1] - 1; j++) {
-                    double delta = 0;
-                    for (int k = 0; k < this.BRAIN_LAYER_SIZES[this.BRAIN_LAYER_SIZES.length-1] - 1; k++)
-                        delta += 2 * (this.neurons[this.BRAIN_LAYER_SIZES.length-1][k] - desiredOutputs[k]) * this.neurons[this.BRAIN_LAYER_SIZES.length-1][k] * (1 - this.neurons[this.BRAIN_LAYER_SIZES.length-1][k]) * this.axons[1][j][k] * this.neurons[1][k] * (1 - this.neurons[1][k]) * this.neurons[0][nonzero[i]] * this.alpha;
+                for (int j = 0; j < this.neurons[1].length - 1; j++) {
+                    double delta = 0.;
+                    for (int k = 0; k < this.neurons[this.neurons.length-1].length - 1; k++)
+                        delta += 2 * (this.neurons[this.neurons.length-1][k] - desiredOutputs[k]) * this.neurons[this.neurons.length-1][k] * (1 - this.neurons[this.neurons.length-1][k]) * this.axons[1][j][k] * this.neurons[1][k] * (1 - this.neurons[1][k]) * this.neurons[0][nonzero[i]] * this.alpha;
                     this.axons[0][ nonzero[i] ][j] -= delta;
                 }
             }
 
-            for (int i = 0; i < this.BRAIN_LAYER_SIZES[1]; i++) {
-                for (int j = 0; j < this.BRAIN_LAYER_SIZES[2]-1; j++)
+            for (int i = 0; i < this.neurons[1].length; i++) {
+                for (int j = 0; j < this.neurons[2].length-1; j++)
                     this.axons[1][i][j] -= 2 * (this.neurons[2][j] - desiredOutputs[j]) * this.neurons[2][j] * (1 - neurons[2][j]) * this.neurons[1][i] * this.alpha; //delta
             }
         }
 
-        this.topOutput = calculateTopOutput();
+        this.prediction = determinePrediction();
         double totalError = 0.;
-        int end = this.BRAIN_LAYER_SIZES.length - 1; //index of the last layer
+        int end = this.neurons.length - 1; //index of the last layer
 
-        for(int i = 0; i < this.BRAIN_LAYER_SIZES[end] - 1; i++)
+        for(int i = 0; i < this.neurons[end].length - 1; i++)
             totalError += Math.pow(neurons[end][i] - desiredOutputs[i], 2); //square the error and add it to the total
         
-        return totalError / (this.BRAIN_LAYER_SIZES[end] - 1); //average the error
+        return totalError / (this.neurons[end].length - 1); //average the error
         
     }
     
@@ -149,11 +149,11 @@ public class Brain {
      * 
      * @return
      */
-    public int calculateTopOutput() {
+    public int determinePrediction() {
         double record = 0;
         int recordHolder = 0;
-        int end = this.BRAIN_LAYER_SIZES.length-1;
-        for (int i = 0; i < this.BRAIN_LAYER_SIZES[end] - 1; i++){
+        int end = this.neurons.length-1;
+        for (int i = 0; i < this.neurons[end].length - 1; i++) {
             if (this.neurons[end][i] > record) {
                 record = this.neurons[end][i];
                 recordHolder = i;
@@ -167,8 +167,8 @@ public class Brain {
      * 
      * @return
      */
-    public int getTopOutput() {
-    		return this.topOutput;
+    public int getPrediction() {
+        return this.prediction;
     }
     
     
@@ -177,7 +177,7 @@ public class Brain {
      * @return
      */
     public double[][] getNeurons() {
-    		return this.neurons;
+        return this.neurons;
     }
     
     
@@ -186,11 +186,10 @@ public class Brain {
      * @return
      */
     public double[][][] getAxons() {
-    		return this.axons;
+        return this.axons;
     }
     
-    
-    //not yet tested
+
     public static Brain loadBrain(String neuronsFileName, String axonsFileName) throws FileNotFoundException {
     	
         Scanner scanner;

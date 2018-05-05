@@ -6,54 +6,55 @@ import java.util.Scanner;
 public class Main {
 	
 
-	static final int TRAINS_PER_STEP = 20000; //increase this to improve training speed slightly
-	static final double MIN_ACCURACY = 0.5;
+	private static final int TRAINS_PER_STEP = 20000; //increase this to improve training speed slightly
+	private static final double MIN_ACCURACY = 0.5;
 	
-	static final int MINIMUM_WORD_LENGTH = 4;
+	private static final int MINIMUM_WORD_LENGTH = 4;
 
-	static final String[] LANGUAGES = {"Random","Key Mash","English","Spanish","French","German","Japanese","Swahili","Mandarin","Esperanto","Dutch","Polish","Lojban"};
+	private static final String[] LANGUAGES = {"Random","Key Mash","English","Spanish","French","German","Japanese","Swahili","Mandarin","Esperanto","Dutch","Polish","Lojban"};
 
-	static final String[][] trainingData = new String[LANGUAGES.length][];
+	private static final String[][] trainingData = new String[LANGUAGES.length][];
 	
-	static final int MAX_INPUT_LENGTH = 15;
-	static final int INPUTS_PER_CHAR = 27; //number of letters + 1 extra
+	private static final int MAX_INPUT_LENGTH = 15;
+	private static final int INPUTS_PER_CHAR = 27; //number of letters + 1 extra
 	
-	static final int INPUT_LAYER_HEIGHT = INPUTS_PER_CHAR * MAX_INPUT_LENGTH + 1;
-	static final int MIDDLE_LAYER_NEURON_COUNT = 30; //This can be any number, around 20 is a good default
-	static final int OUTPUT_LAYER_HEIGHT = LANGUAGES.length + 1;
+	private static final int INPUT_LAYER_HEIGHT = INPUTS_PER_CHAR * MAX_INPUT_LENGTH + 1;
+	private static final int MIDDLE_LAYER_NEURON_COUNT = 30; //This can be any number, around 20 is a good default
+	private static final int OUTPUT_LAYER_HEIGHT = LANGUAGES.length + 1;
 	
 
-	static Brain brain;
-	static int lineAt = 0;
-	static int iteration = 0;
-	static boolean[] recentGuesses = new boolean[20000];
-	static int recentRightCount = 0;
-	static int desiredOutput = 0;
-	static int[] countedLanguages = {2,3,4,5};
+	private static Brain brain;
+	//private static int lineAt = 0;
+	private static int iteration = 0;
+	private static boolean[] recentGuesses = new boolean[20000];
+	private static int recentRightCount = 0;
+	private static int desiredOutput = 0;
+	private static int[] countedLanguages = {2,3,4,5};
 	
-	static int[] langSizes = new int[LANGUAGES.length];
+	private static int[] langSizes = new int[LANGUAGES.length];
 	
-	static int[][] longTermResults = new int[LANGUAGES.length][LANGUAGES.length];
+	private static int[][] longTermResults = new int[LANGUAGES.length][LANGUAGES.length];
 	
-	static int streak = 0;
-	static int longStreak = 0;
+	private static int streak = 0;
+	private static int longStreak = 0;
 	
 
 	//This method is long and pretty inefficient, speed it up
-	static void train() {
+	private static void train() {
 	    int lang = countedLanguages[ (int)(Math.random()*countedLanguages.length) ]; //randomly select the language to use for this iteration
 	    String word = ""; //String to store the chosen word
 	    while(word.length() < MINIMUM_WORD_LENGTH) {
-	        int wordIndex = (int)( Math.random()*langSizes[lang] );
-	        lineAt = binarySearch(lang, wordIndex);
-	        String[] parts = trainingData[lang][lineAt].split(","); //split the words at the commas
+	        int wordIndex = (int)(Math.random()*langSizes[lang]);
+	        //lineAt =
+	        String[] parts = trainingData[lang][binarySearch(lang, wordIndex)].split(","); //split the words at the commas
 	        word = parts[0];
 	    }
 	    desiredOutput = lang;
 	    iteration++;
 	    brain.useBrain( setInputs(word), setDesiredOutputs(desiredOutput), true );
 
-	    if(brain.getTopOutput() == desiredOutput) {
+	    //the remainder of this method only works to give the streak length which could be excluded
+	    if(brain.getPrediction() == desiredOutput) {
 	        if(!recentGuesses[iteration%recentGuesses.length])
 	            recentRightCount++;
 	        
@@ -74,31 +75,31 @@ public class Main {
 	        
 	        streak = 0;
 	    }
-	    
-	    
-	    longTermResults[brain.getTopOutput()][desiredOutput]++;
+
+	    longTermResults[brain.getPrediction()][desiredOutput]++;
 	
 	}
-	
+
+
 	//fix binary search code
-	static int binarySearch(int lang, int n) {
+	private static int binarySearch(int lang, int n) {
 	    return binarySearch(lang, n,0,trainingData[lang].length-1);
 	}
-	static int binarySearch(int lang, int n, int beg, int end){
+	private static int binarySearch(int lang, int n, int beg, int end){
 	    
-	    if(beg > end)
+	    if (beg > end)
 	        return beg;
 	    
 	    int mid = (beg+end)/2;
 	  
 	    String s = trainingData[lang][mid];
-	    int diff = n-Integer.parseInt(s.substring(s.lastIndexOf(",")+1,s.length()));
+	    int diff = n-Integer.parseInt( s.substring(s.lastIndexOf(",")+1) );
 	    
-	    if(diff == 0) //if this is the value
+	    if (diff == 0) //if this is the value
 	        return mid+1;
-	    else if(diff > 0)
+	    else if (diff > 0)
 	        return binarySearch(lang,n,mid+1,end);
-	    else if(diff < 0)
+	    else if (diff < 0)
 	        return binarySearch(lang,n,beg,mid-1);
 	    
 	    return -1; //cannot be found
@@ -106,11 +107,11 @@ public class Main {
 	}
 	
 	
-	static double[] setInputs(String word) {
+	private static double[] setInputs(String word) {
 	    
 	    double inputs[] = new double[INPUT_LAYER_HEIGHT]; //values for input layers
 	        
-	    for(int i = 0; i < MAX_INPUT_LENGTH; i++){
+	    for (int i = 0; i < MAX_INPUT_LENGTH; i++){
 	        int c = 0;
 	        if(i < word.length())
 	            c = (int) word.toUpperCase().charAt(i)-64;
@@ -123,80 +124,34 @@ public class Main {
 	}
 	
 	
-	static double[] setDesiredOutputs(int desiredOutput) {
+	private static double[] setDesiredOutputs(int desiredOutput) {
 	  
 	    double desiredOutputs[] = new double[OUTPUT_LAYER_HEIGHT];
 	        
 	    desiredOutputs[desiredOutput] = 1; //set the desired output to the designated language, 1 = 100% confidence in the result
-	    
-	    //System.out.println(desiredOutputs);
-	    
+
 	    return desiredOutputs;
 	  
 	}
 
 
-	//this should probably not remove non English characters
-	static String sanitizeUserInput(String input) {
+	//this should probably handle non English characters better
+	private static String sanitizeUserInput(String input) {
 		return input.replaceAll("[^ a-zA-Z]", "");
 	}
 
 
 	public static void main(String[] args) {
-
-		Brain tempBrain = null;
-		/*try {
-			tempBrain = Brain.loadBrain("savedNetwork/neurons.txt", "savedNetwork/axons.txt");
-			System.out.println("NEURONS");
-			for (double[] i : tempBrain.getNeurons()) {
-				for (double j : i)
-					System.out.printf("%5.20f\t", j);
-				System.out.println();
-			}
-			System.out.println("AXONS");
-			for (double[][] i : tempBrain.getAxons()) {
-				for (double[] j : i) {
-					for (double k : j)
-						System.out.printf("%5.20f,", k);
-					System.out.print("\t");
-				}
-				System.out.println();
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}*/
-
-		/*try {
-			tempBrain = Brain.loadBrain("savedNetwork/neurons.txt", "savedNetwork/axons.txt");
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-
-		System.out.println(tempBrain.getAxons()[1][0][0]);
-
-		try {
-			Brain.exportBrain(tempBrain, "savedNetwork/neurons.txt", "savedNetwork/axons.txt");
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-
-		try {
-			tempBrain = Brain.loadBrain("savedNetwork/neurons.txt", "savedNetwork/axons.txt");
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-
-		System.out.println(tempBrain.getAxons()[1][0][0]);
-
-
-		if (true)
-			return;*/
 		
 	    //Load training data
 	    for (int i = 0; i < LANGUAGES.length; i++) {
 	        trainingData[i] = Processing.loadStrings("data/output"+i+".txt");
+	        for(String j : trainingData[i])
+	        	System.out.println(j);
 	        String s = trainingData[i][trainingData[i].length-1];
-	        langSizes[i] = Integer.parseInt(s.substring(s.indexOf(",")+1,s.length()));
+	        //System.out.println(trainingData[i].length);
+	        langSizes[i] = Integer.parseInt(s.substring(s.indexOf(",")+1));
+	        //System.out.println(langSizes[i]);
 	    }
 	  
 	    //setup neuronet
@@ -205,21 +160,15 @@ public class Main {
 
 	    System.out.println("TRAINING IN PROGRESS...");
 
-	    //double accuracy = .5;
-	    //Train the neuronet
-	    //for(int i = 0; i < 2000; i++) {
-		while( ((double)recentRightCount)/recentGuesses.length < MIN_ACCURACY) {
-	    	for(int j = 0; j < TRAINS_PER_STEP; j++)
+		while ( ((double)recentRightCount)/recentGuesses.length < MIN_ACCURACY) {
+	    	for (int j = 0; j < TRAINS_PER_STEP; j++)
 	    		train();
 	    	System.out.println(iteration+"\t"+((double)recentRightCount)/recentGuesses.length+"\t"+longStreak);
-			/*if( ((double)recentRightCount)/recentGuesses.length > accuracy ) {
-				System.out.println((int)(accuracy*100) + "% Accuracy Acheived");
-				accuracy += .05;
-			}*/
 	    }
 
 	    System.out.println("TRAINING COMPLETE.");
 
+		//Save the network for use at a later time
 		try {
 			Brain.exportBrain(brain, "savedNetwork/neurons.txt", "savedNetwork/axons.txt");
 		} catch (FileNotFoundException e) {
@@ -227,7 +176,7 @@ public class Main {
 		}
 
 	    Scanner scanner = new Scanner(System.in);
-	    while(true) {
+	    while (true) {
 
 	    	System.out.print("Type a word, phrase, or sentence: ");
 
@@ -240,7 +189,7 @@ public class Main {
 	    			continue;
 
 				brain.useBrain(setInputs(i), setDesiredOutputs(0), false);
-				results[brain.getTopOutput()]++;
+				results[brain.getPrediction()]++;
 			}
 			int max = 0;
 	    	int max_index = 0;
@@ -255,7 +204,5 @@ public class Main {
 		}
 
 	}
-	
-	
 
 }

@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0c950d04-4d6e-4d70-b4d8-5df655168989" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/savedNetwork/axons.txt" beforeDir="false" afterPath="$PROJECT_DIR$/savedNetwork/axons.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/savedNetwork/neurons.txt" beforeDir="false" afterPath="$PROJECT_DIR$/savedNetwork/neurons.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/neuralNetworkLanguageDetection/Brain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/neuralNetworkLanguageDetection/Brain.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/neuralNetworkLanguageDetection/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/neuralNetworkLanguageDetection/Main.java" afterDir="false" />
     </list>
@@ -15,11 +17,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/neuralNetworkLanguageDetection/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3795">
-              <caret line="255" lean-forward="true" selection-start-line="255" selection-end-line="255" />
+            <state relative-caret-position="-201">
+              <caret line="153" column="33" selection-start-line="153" selection-start-column="33" selection-end-line="153" selection-end-column="33" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#4145#4146#0" expanded="true" />
@@ -29,16 +31,41 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Brain.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="output12.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/data/output12.txt">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file leaf-file-name="Brain.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/neuralNetworkLanguageDetection/Brain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="242">
-              <caret line="268" column="19" selection-start-line="268" selection-start-column="19" selection-end-line="268" selection-end-column="19" />
+            <state relative-caret-position="90">
+              <caret line="10" column="47" selection-start-line="10" selection-start-column="30" selection-end-line="10" selection-end-column="47" />
+              <folding>
+                <element signature="e#2066#2067#0" expanded="true" />
+                <element signature="e#2111#2112#0" expanded="true" />
+                <element signature="e#5323#5324#0" expanded="true" />
+                <element signature="e#5378#5379#0" expanded="true" />
+                <element signature="e#5855#5856#0" expanded="true" />
+                <element signature="e#5892#5893#0" expanded="true" />
+                <element signature="e#5976#5977#0" expanded="true" />
+                <element signature="e#6011#6012#0" expanded="true" />
+                <element signature="e#6097#6098#0" expanded="true" />
+                <element signature="e#6130#6131#0" expanded="true" />
+                <element signature="method#loadBrain#0;class#Brain#0" />
+                <element signature="method#exportBrain#0;class#Brain#0" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>topOutput</find>
+      <find>langSizes</find>
+    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -75,6 +102,11 @@
             <path>
               <item name="neuralNetworkLanguageDetection" type="b2602c69:ProjectViewProjectNode" />
               <item name="neuralNetworkLanguageDetection" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="neuralNetworkLanguageDetection" type="b2602c69:ProjectViewProjectNode" />
+              <item name="neuralNetworkLanguageDetection" type="462c0819:PsiDirectoryNode" />
               <item name="savedNetwork" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -82,6 +114,9 @@
         </subPane>
       </pane>
     </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file:///Users/brett/eclipse-workspace/neuralNetworkLanguageDetection/src/neuralNetworkLanguageDetection/Main.java" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -209,7 +244,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="1" />
+      <option name="time" value="4" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -229,6 +264,20 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="825">
           <caret line="58" column="15" selection-start-line="58" selection-start-column="15" selection-end-line="58" selection-end-column="15" />
+          <folding>
+            <element signature="e#2066#2067#0" expanded="true" />
+            <element signature="e#2111#2112#0" expanded="true" />
+            <element signature="e#5323#5324#0" expanded="true" />
+            <element signature="e#5378#5379#0" expanded="true" />
+            <element signature="e#5855#5856#0" expanded="true" />
+            <element signature="e#5892#5893#0" expanded="true" />
+            <element signature="e#5976#5977#0" expanded="true" />
+            <element signature="e#6011#6012#0" expanded="true" />
+            <element signature="e#6097#6098#0" expanded="true" />
+            <element signature="e#6130#6131#0" expanded="true" />
+            <element signature="method#loadBrain#0;class#Brain#0" />
+            <element signature="method#exportBrain#0;class#Brain#0" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -237,13 +286,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/data/output2.txt">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/neuralNetworkLanguageDetection/Brain.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="268" column="19" selection-start-line="268" selection-start-column="19" selection-end-line="268" selection-end-column="19" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/savedNetwork/neurons.txt">
       <provider selected="true" editor-type-id="text-editor">
@@ -259,14 +301,43 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/data/output11.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-327" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/output12.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/neuralNetworkLanguageDetection/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3795">
-          <caret line="255" lean-forward="true" selection-start-line="255" selection-end-line="255" />
+        <state relative-caret-position="-201">
+          <caret line="153" column="33" selection-start-line="153" selection-start-column="33" selection-end-line="153" selection-end-column="33" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#4145#4146#0" expanded="true" />
             <element signature="e#4166#4167#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/neuralNetworkLanguageDetection/Brain.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="10" column="47" selection-start-line="10" selection-start-column="30" selection-end-line="10" selection-end-column="47" />
+          <folding>
+            <element signature="e#2066#2067#0" expanded="true" />
+            <element signature="e#2111#2112#0" expanded="true" />
+            <element signature="e#5323#5324#0" expanded="true" />
+            <element signature="e#5378#5379#0" expanded="true" />
+            <element signature="e#5855#5856#0" expanded="true" />
+            <element signature="e#5892#5893#0" expanded="true" />
+            <element signature="e#5976#5977#0" expanded="true" />
+            <element signature="e#6011#6012#0" expanded="true" />
+            <element signature="e#6097#6098#0" expanded="true" />
+            <element signature="e#6130#6131#0" expanded="true" />
+            <element signature="method#loadBrain#0;class#Brain#0" />
+            <element signature="method#exportBrain#0;class#Brain#0" />
           </folding>
         </state>
       </provider>
